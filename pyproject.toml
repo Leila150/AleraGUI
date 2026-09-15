@@ -4,13 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "AleraGUI"
-version = "0.1.0.dev1"
+version = "0.1.0a0"
 description = "A universal, reactive Python GUI framework with a high-performance 2D foundation."
 requires-python = ">=3.10"
 license = {text = "MIT"}
 
 [tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-dir]
-"" = "src"
+include = ["aleragui*"]
