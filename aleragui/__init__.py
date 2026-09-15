@@ -1,17 +1,16 @@
-"""AleraGUI - universal, backend-neutral 2D GUI framework foundation.
-
-2D is the current core. The architecture is designed for native desktop,
-mobile and web backends while keeping the Python widget API consistent.
-"""
+"""AleraGUI - universal, reactive, backend-neutral 2D GUI framework."""
 from .app import AleraGUI, Application, Window
 from .canvas import Canvas, Layer, Brush, Path, Shape
 from .types import *
 from .geometry import *
 from .geometry2d import *
+from .geometry_advanced import *
 from .rendering import Paint, DrawCommand, RenderList, Renderer, SoftwareRenderer, RenderNode, RenderEngine
 from .rendering2d import RenderBatch, Renderer2D, RecordingRenderer, Gradient, Stroke, Fill, Clip, RenderState, RenderCache
+from .rendering_advanced import Shader, Effect, RenderTarget, RenderPass, Batch, RenderGraph, RendererFeatures, RenderContext, FrameScheduler
 from .layout_engine import resolve, box, distribute, flex_layout, grid_layout
 from .properties import Property, Binding, ObservableMixin, observable, computed
+from .properties_advanced import PropertySpec, AdvancedProperty, enum, number, one_of, positive, transaction
 from .property_catalog import *
 from .widgets import Widget, Label, Button, TextInput, Image, ScrollView, Container
 from .widgets_extra import Icon, Link, CheckBox, RadioButton, Switch, Slider, ProgressBar, Spinner, Stepper, List, Menu, NavigationBar, Sidebar, Breadcrumb, CodeEditor, RichText, Chart
@@ -22,13 +21,16 @@ from .overlays import *
 from .events import Event, EventDispatcher, EVENTS
 from .input import Pointer, Key, Touch, GestureRecognizer, FocusManager
 from .input2 import InputEvent, MouseEvent, TouchEvent, PenEvent, KeyEvent, GamepadEvent, InputRouter, GestureEngine
+from .input_advanced import DeviceKind, InputEvent as AdvancedInputEvent, PointerState, InputManager, ShortcutManager, Gesture, GestureManager
 from .accessibility import AccessibilityNode, AccessibilityManager
 from .backend import Backend, HeadlessBackend, BackendRegistry, PlatformInfo, backends
 from .platforms import PlatformCapabilities, CAPABILITIES, current_platform, capabilities, supports, available_platforms
 from .tasks import Task, TaskManager
 from .asyncio_gui import CancelScope, async_handler, debounce, throttle, gather, sleep, yield_control
-from .theme import Theme, Palette, StyleSheet, LIGHT, DARK
-from .themes import AdvancedTheme, ThemeTokens, LIGHT_MODERN, DARK_MODERN, HIGH_CONTRAST
+from .async_advanced import AsyncScope, Progress, AsyncSignal, run_in_executor, iterate, timeout, next_frame, sleep_frame
+from .theme import Theme as BaseTheme, Palette, StyleSheet, LIGHT, DARK
+from .themes import AdvancedTheme, ThemeTokens as LegacyThemeTokens, LIGHT_MODERN, DARK_MODERN, HIGH_CONTRAST
+from .theme_advanced import Theme, ThemeTokens, StyleRule, Cascade, LIGHT_PRO, DARK_PRO
 from .decorators import *
 from .animation import Animation, Timeline, Easing
 
