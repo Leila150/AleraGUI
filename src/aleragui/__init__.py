@@ -11,6 +11,8 @@ from .types import (
 )
 from .events import Event, EventEmitter, EventContext, event, on, bind, watch
 from .canvas import Canvas, Layer, Path, Brush, Shape, Text, ImageDrawable
+from .rendering import BlendMode, FillRule, LineCap, LineJoin, Paint, DrawCommand, Renderer2D
+from .geometry import lerp, lerp_point, rotate_point, angle_between, distance, clamp, point_in_polygon, polygon_bounds, snap
 from .decorators import (
     canvas_event, draw, on_pointer_down, on_pointer_move, on_pointer_up,
     on_pointer_enter, on_pointer_leave, on_click, on_double_click,
@@ -25,9 +27,11 @@ __all__ = [
     "Gradient", "Stop", "Font", "LineStyle", "StrokeStyle", "Event",
     "EventEmitter", "EventContext", "event", "on", "bind", "watch",
     "Canvas", "Layer", "Path", "Brush", "Shape", "Text", "ImageDrawable",
-    "canvas_event", "draw", "on_pointer_down", "on_pointer_move",
-    "on_pointer_up", "on_pointer_enter", "on_pointer_leave", "on_click",
-    "on_double_click", "on_long_press", "on_drag", "on_drop", "on_scroll",
-    "on_resize", "on_move", "on_mount", "on_unmount", "animatable",
-    "observable", "computed", "command",
+    "BlendMode", "FillRule", "LineCap", "LineJoin", "Paint", "DrawCommand", "Renderer2D",
+    "lerp", "lerp_point", "rotate_point", "angle_between", "distance", "clamp",
+    "point_in_polygon", "polygon_bounds", "snap", "canvas_event", "draw",
+    "on_pointer_down", "on_pointer_move", "on_pointer_up", "on_pointer_enter",
+    "on_pointer_leave", "on_click", "on_double_click", "on_long_press", "on_drag",
+    "on_drop", "on_scroll", "on_resize", "on_move", "on_mount", "on_unmount",
+    "animatable", "observable", "computed", "command",
 ]
