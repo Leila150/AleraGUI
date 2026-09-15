@@ -3,14 +3,19 @@ from __future__ import annotations
 from .events import EventDispatcher
 
 class Reactive:
-    def __init__(self): self._values={}; self._watchers={}
+    def __init__(self): self._values={}; self._watchers={}; self._invalidated=True
     def __setattr__(self,name,value):
         if name.startswith("_"): object.__setattr__(self,name,value); return
         old=self._values.get(name,object())
         self._values[name]=value; object.__setattr__(self,name,value)
         if old != value:
             for cb in tuple(self._watchers.get(name,())): cb(value,old)
+            invalidate=getattr(self,"invalidate",None)
+            if invalidate: invalidate(property=name)
     def watch(self,name,callback): self._watchers.setdefault(name,[]).append(callback); return callback
+    def unwatch(self,name,callback):
+        try: self._watchers.get(name,[]).remove(callback)
+        except ValueError: pass
 
 class Widget(Reactive, EventDispatcher):
     def __init__(self, **kwargs):
@@ -24,19 +29,24 @@ class Widget(Reactive, EventDispatcher):
         self.clip=kwargs.pop("clip",False); self.shadow=kwargs.pop("shadow",None); self.tooltip=kwargs.pop("tooltip",None)
         self.focusable=kwargs.pop("focusable",False); self.accessible=kwargs.pop("accessible",True)
         self.accessibility_label=kwargs.pop("accessibility_label",None); self.tab_index=kwargs.pop("tab_index",0)
+        self.style_class=kwargs.pop("style_class",None); self.cursor=kwargs.pop("cursor","default"); self.data={}
         for k,v in kwargs.items(): setattr(self,k,v)
     def add(self,*children):
         for child in children:
             if child.parent is not None: child.parent.remove(child)
             child.parent=self; self.children.append(child)
-        return children[-1] if children else None
+        self.invalidate(property="children"); return children[-1] if children else None
     def remove(self,child):
-        if child in self.children: self.children.remove(child); child.parent=None
+        if child in self.children: self.children.remove(child); child.parent=None; self.invalidate(property="children")
     def clear(self):
         for c in self.children: c.parent=None
-        self.children.clear()
-    def show(self): self.visible=True
-    def hide(self): self.visible=False
+        self.children.clear(); self.invalidate(property="children")
+    def invalidate(self,**reason): self._invalidated=True; self.emit("invalidate",self,reason)
+    def validate(self): self._invalidated=False; return self
+    @property
+    def invalidated(self): return self._invalidated
+    def show(self): self.visible=True; return self
+    def hide(self): self.visible=False; return self
     def focus(self): self.emit("focus"); return self
     def blur(self): self.emit("blur"); return self
     def animate(self, **kwargs):
@@ -72,9 +82,10 @@ class TextInput(Widget):
         self.alignment="left"; self.vertical_alignment="center"; self.cursor_position=0; self.selection_start=0; self.selection_end=0; self.cursor_color="#000000"; self.selection_color="#4488ff"
         self.auto_complete=False; self.spellcheck=False; self.keyboard_type="text"; self.return_key="default"; self.scrollable=True; self.undo_enabled=True; self.redo_enabled=True
     def set_text(self,value):
-        if self.read_only: return
+        if self.read_only: return self
         if self.max_length is not None: value=value[:self.max_length]
-        self.text=value; self.cursor_position=min(len(value),self.cursor_position); self.emit("change",value)
+        self.text=value; self.cursor_position=min(len(value),self.cursor_position); self.emit("change",value); return self
+    def submit(self): self.emit("submit",self.text); return self
     def on_change(self,callback=None): return self.on("change",callback) if callback else lambda fn:self.on("change",fn)
     def on_submit(self,callback=None): return self.on("submit",callback) if callback else lambda fn:self.on("submit",fn)
 
@@ -96,4 +107,4 @@ class ScrollView(Container):
     def scroll_to(self,x=None,y=None):
         if x is not None: self.scroll_x=x
         if y is not None: self.scroll_y=y
-        self.emit("scroll",self.scroll_x,self.scroll_y)
+        self.emit("scroll",self.scroll_x,self.scroll_y); return self
