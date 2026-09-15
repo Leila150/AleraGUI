@@ -1,41 +1,61 @@
 # AleraGUI
 
-A universal Python GUI framework designed around a reactive UI model and a backend-neutral rendering architecture.
+A universal Python GUI framework built around a backend-neutral, reactive **2D** engine.
 
-## Current development stage
+## 2D-first architecture
 
-**2D foundation only.** 3D rendering is intentionally not implemented yet.
+AleraGUI currently provides the foundation for:
 
-The first foundation contains:
+- Reactive widgets and automatic invalidation
+- Custom, absolute, flex, grid, stack, anchor, constraint, responsive and dock layouts
+- 2D Canvas drawing, paths, polygons and layers
+- Geometry, hit testing, Bezier curves and transforms
+- Backend-neutral render commands and render trees
+- Animation/easing primitives
+- Unified mouse, keyboard, touch and gesture input
+- Accessibility semantics
+- Themes and stylesheets
+- Async/background tasks
+- Desktop/mobile/web-oriented backend contracts
+- Extensible widgets, views and overlays
 
-- Rich 2D geometry and unit types
-- Colors, gradients, fonts, shadows and transforms
-- 2D Canvas and drawing primitives
-- Lines, polylines, polygons, rectangles, circles, ellipses, arcs, sectors and stars
-- Vector paths and Bézier-style path commands
-- Text and image drawables
-- Brushes and erasing
-- Canvas layers and compositing metadata
-- Event emitter infrastructure
-- Drawing, pointer, gesture and lifecycle decorators
-- Observable/computed/binding/command decorator metadata
-
-## Design goals
-
-AleraGUI is intended to provide one GUI API that can eventually target desktop platforms, mobile applications and the web. Platform rendering, packaging and native integration belong to later backend layers; the core API remains platform-neutral.
-
-The project deliberately does **not** contain a URL router, HTTP server or backend framework. AleraGUI is a GUI framework.
-
-## Example
+## Reactive UI
 
 ```python
-from aleragui import Canvas, Color
+from aleragui import Label
 
-canvas = Canvas(width=800, height=600)
-canvas.add_brush("#ff3366", size=12, smoothing=0.8)
-canvas.polygon([(100, 100), (300, 80), (250, 250)], fill=Color("#3366ff"))
-canvas.circle((400, 300), 80, fill=Color("#22cc88"))
-canvas.line((0, 0), (800, 600), width=4)
+label = Label("Hello")
+label.text = "Updated"
+label.position = (100, 200)
 ```
 
-This API is the beginning of the 2D engine, not the final renderer. Rendering backends will be added without changing the public drawing model.
+Property changes invalidate the affected widget automatically; a concrete platform renderer can consume those invalidations without requiring manual `refresh()` calls.
+
+## CustomLayout
+
+```python
+from aleragui import CustomLayout, Label, Button
+
+layout = CustomLayout()
+label = layout.add(Label("Hello"))
+button = layout.add(Button(text="Click"))
+label.position = (100, 100)
+button.position = (100, 180)
+```
+
+## Canvas
+
+```python
+from aleragui import Canvas
+
+canvas = Canvas()
+canvas.add_brush("#ff0000")
+canvas.line((0, 0), (100, 100))
+canvas.polygon([(50, 10), (100, 80), (10, 80)])
+```
+
+## Scope
+
+AleraGUI is a **GUI framework**, not an application/web router. Visual navigation such as pages, tabs, drawers and views belongs in the GUI layer; URL/API/server routing does not.
+
+3D rendering is intentionally not included in the current 2D implementation phase.
