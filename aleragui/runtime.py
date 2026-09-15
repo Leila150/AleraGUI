@@ -93,6 +93,11 @@ class WidgetTree:
         return result
     def first(self,predicate=None,**attrs):
         items=self.find(predicate,**attrs); return items[0] if items else None
+    def query(self,selector):
+        """Small selector language: '#id', '.style_class', or 'ClassName'."""
+        if selector.startswith("#"): return self.find(id=selector[1:])
+        if selector.startswith("."): return self.find(style_class=selector[1:])
+        return self.find(lambda node:type(node).__name__==selector)
     def walk(self,node=None):
         node=self.root if node is None else node
         if node is None: return
