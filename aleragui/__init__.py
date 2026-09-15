@@ -1,5 +1,6 @@
 """AleraGUI - universal, reactive, backend-neutral 2D GUI framework."""
 from .app import AleraGUI, Application, Window
+from .runtime import DuplicateIDError, IDRegistry, HitResult, hit_test, EventRouter, WidgetTree, FrameScheduler, InvalidationQueue
 from .canvas import Canvas, Layer, Brush, Path, Shape
 from .types import *
 from .geometry import *
@@ -7,12 +8,12 @@ from .geometry2d import *
 from .geometry_advanced import *
 from .rendering import Paint, DrawCommand, RenderList, Renderer, SoftwareRenderer, RenderNode, RenderEngine
 from .rendering2d import RenderBatch, Renderer2D, RecordingRenderer, Gradient, Stroke, Fill, Clip, RenderState, RenderCache
-from .rendering_advanced import Shader, Effect, RenderTarget, RenderPass, Batch, RenderGraph, RendererFeatures, RenderContext, FrameScheduler
+from .rendering_advanced import Shader, Effect, RenderTarget, RenderPass, Batch, RenderGraph, RendererFeatures, RenderContext
 from .layout_engine import resolve, box, distribute, flex_layout, grid_layout
 from .properties import Property, Binding, ObservableMixin, observable, computed
 from .properties_advanced import PropertySpec, AdvancedProperty, enum, number, one_of, positive, transaction
 from .property_catalog import *
-from .widgets import Widget, Label, Button, TextInput, Image, ScrollView, Container
+from .widgets import Widget, Label, Button, TextInput, Image, ScrollView, Container, Reactive
 from .widgets_extra import Icon, Link, CheckBox, RadioButton, Switch, Slider, ProgressBar, Spinner, Stepper, List, Menu, NavigationBar, Sidebar, Breadcrumb, CodeEditor, RichText, Chart
 from .widgets_catalog import *
 from .containers import *
@@ -34,5 +35,5 @@ from .theme_advanced import Theme, ThemeTokens, StyleRule, Cascade, LIGHT_PRO, D
 from .decorators import *
 from .animation import Animation, Timeline, Easing
 
-__all__ = [name for name in globals() if not name.startswith('_')]
-__version__ = "0.1.0-alpha"
+__all__=[name for name in globals() if not name.startswith("_")]
+__version__="0.1.0-alpha"
